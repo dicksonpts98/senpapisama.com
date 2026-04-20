@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENPAPI-SAMA — Digital Art Portfolio</title>
+  <meta name="description" content="SENPAPI-SAMA — Digital Artist & Illustrator Portfolio">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 1 — GAME LOGIN / INTRO
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="login-screen">
+    <canvas id="particle-canvas"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <div class="hud-corner hud-tl"></div>
+    <div class="hud-corner hud-tr"></div>
+    <div class="hud-corner hud-bl"></div>
+    <div class="hud-corner hud-br"></div>
+
+    <div class="hud-top-bar">
+      <span class="hud-label">SYS.ONLINE</span>
+      <span class="hud-label" id="hud-clock"></span>
+      <span class="hud-label">PORTFOLIO v2.1</span>
+    </div>
+
+    <div class="login-content">
+      <div class="login-logo-ring">
+        <svg viewBox="0 0 200 200" class="logo-ring-svg">
+          <circle cx="100" cy="100" r="95" class="ring ring-outer"/>
+          <circle cx="100" cy="100" r="82" class="ring ring-inner"/>
+          <circle cx="100" cy="100" r="68" class="ring ring-core"/>
+        </svg>
+        <div class="login-emblem">
+          <img src="assets/logo.png" alt="SENPAPI-SAMA">
+        </div>
+      </div>
+
+      <h1 class="login-title" data-text="SENPAPI-SAMA">
+        <span class="title-glitch">SENPAPI-SAMA</span>
+      </h1>
+      <p class="login-subtitle"></p>
+
+      <div class="login-welcome">WELCOME</div>
+
+      <button id="enter-btn" class="login-enter-btn" aria-label="Enter Portfolio">
+        <span class="btn-border"></span>
+        <span class="btn-text">Enter</span>
+        <span class="btn-glow"></span>
+      </button>
+
+      <p class="login-hint">PRESS ENTER OR CLICK TO BEGIN</p>
+    </div>
+
+    <div class="hud-bottom-bar">
+      <span class="hud-label">ART.DATABASE</span>
+      <div class="hud-loading-bar"><div class="hud-loading-fill"></div></div>
+      <span class="hud-label" id="artwork-count"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCREEN 2 — MAIN PORTFOLIO
+       ═══════════════════════════════════════════════════════════ -->
+  <div id="portfolio" class="portfolio hidden">
+    <nav class="nav">
+      <div class="nav-brand" id="nav-home">
+        <div class="nav-logo"><img src="assets/logo.png" alt="SENPAPI-SAMA"></div>
+        <span class="nav-name">SENPAPI-SAMA</span>
+      </div>
+      <div class="nav-links">
+        <button class="nav-link active" data-section="gallery">GALLERY</button>
+        <button class="nav-link" data-section="table">TABLE DISPLAY</button>
+        <button class="nav-link" data-section="about">ABOUT</button>
+      </div>
+      <div class="nav-hud">
+        <span class="hud-label nav-clock"></span>
+      </div>
+    </nav>
+
+    <section class="hero" id="hero-section">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-tag">DIGITAL ART PORTFOLIO</div>
+        <div class="hero-logo">
+          <img src="assets/logo.png" alt="SENPAPI-SAMA">
+        </div>
+        <h2 class="hero-title">
+          <span class="hero-line">THANKS FOR</span>
+          <span class="hero-line hero-accent">APPRECIATING</span>
+          <span class="hero-line">THE ART</span>
+        </h2>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num" id="stat-works">0</span>
+            <span class="stat-label">WORKS</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="stat-categories">0</span>
+            <span class="stat-label">SERIES</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-hint">
+        <span>SCROLL</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <section class="filter-section" id="filter-section">
+      <div class="filter-bar" id="filter-bar"></div>
+    </section>
+
+    <section class="gallery" id="gallery-section">
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </section>
+
+    <!-- Table Display (booth photos) — hidden by default -->
+    <section class="booth-section" id="booth-section" hidden>
+      <div class="booth-header">
+        <h2 class="booth-title">TABLE DISPLAY</h2>
+        <p class="booth-sub">Booth setups from conventions</p>
+      </div>
+      <div class="booth-grid" id="booth-grid"></div>
+    </section>
+
+    <div class="about-overlay" id="about-overlay">
+      <div class="about-modal">
+        <button class="about-close" id="about-close">&times;</button>
+        <div class="about-content">
+          <div class="about-avatar">
+            <img src="assets/logo.png" alt="SENPAPI-SAMA">
+          </div>
+          <h2 class="about-name"></h2>
+          <p class="about-tagline"></p>
+          <div class="about-bio"></div>
+          <div class="about-socials" id="about-socials"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+      <button class="lb-close" id="lb-close">&times;</button>
+      <button class="lb-prev" id="lb-prev">&lsaquo;</button>
+      <button class="lb-next" id="lb-next">&rsaquo;</button>
+      <div class="lb-content">
+        <div class="lb-image-wrap">
+          <img id="lb-image" src="" alt="">
+        </div>
+        <div class="lb-info">
+          <span class="lb-category"></span>
+          <h3 class="lb-title"></h3>
+          <p class="lb-description"></p>
+          <div class="lb-tags"></div>
+        </div>
+      </div>
+      <div class="lb-counter"></div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-line"></div>
+      <p>&copy; SENPAPI-SAMA — All artworks are original creations</p>
+    </footer>
+  </div>
+
+  <script src="data/artworks.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
