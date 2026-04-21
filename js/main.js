@@ -369,6 +369,7 @@
   }
 
   enterBtn.addEventListener("click", enterPortfolio);
+  enterBtn.addEventListener("click", SOUND.playClick);
   enterBtn.addEventListener("mouseenter", SOUND.play);
   document.addEventListener("keydown", e => {
     if (e.key === "Enter" && !loginScreen.classList.contains("gone")) {
