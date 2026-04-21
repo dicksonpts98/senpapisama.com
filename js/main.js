@@ -9,6 +9,107 @@
   const FILTERS = CATEGORY_ORDER;
   const SERIES = FILTERS.filter(f => f !== "ALL WORKS");
 
+  // ── MOUSE GLITTER TRAIL ──────────────────────────────────
+  (function initGlitter() {
+    const gc = document.getElementById("glitter-canvas");
+    if (!gc) return;
+    const gctx = gc.getContext("2d");
+
+    function resize() {
+      gc.width = window.innerWidth * devicePixelRatio;
+      gc.height = window.innerHeight * devicePixelRatio;
+      gctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+    window.addEventListener("resize", () => {
+      gc.width = window.innerWidth * devicePixelRatio;
+      gc.height = window.innerHeight * devicePixelRatio;
+      gctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    });
+
+    const sparks = [];
+    const PALETTE = [
+      "rgba(255, 255, 255, ",   // white
+      "rgba(255, 245, 200, ",   // soft gold
+      "rgba(200, 255, 230, ",   // mint
+      "rgba(220, 220, 255, "    // pale violet
+    ];
+
+    let lastSpawn = 0;
+    window.addEventListener("pointermove", (e) => {
+      const now = performance.now();
+      if (now - lastSpawn < 12) return; // throttle spawn rate
+      lastSpawn = now;
+
+      // Spawn 1–2 sparks per move
+      const count = 1 + (Math.random() < 0.3 ? 1 : 0);
+      for (let i = 0; i < count; i++) {
+        sparks.push({
+          x: e.clientX + (Math.random() - 0.5) * 10,
+          y: e.clientY + (Math.random() - 0.5) * 10,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.3) * 0.6 - 0.2, // slight upward drift
+          size: Math.random() * 2.2 + 0.8,
+          life: 1.0,
+          decay: Math.random() * 0.015 + 0.012,
+          color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+          rot: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.1
+        });
+      }
+      if (sparks.length > 180) sparks.splice(0, sparks.length - 180);
+    }, { passive: true });
+
+    function drawStar(x, y, size, alpha, color, rot) {
+      gctx.save();
+      gctx.translate(x, y);
+      gctx.rotate(rot);
+      // 4-point star / sparkle shape
+      gctx.beginPath();
+      for (let i = 0; i < 4; i++) {
+        const angle = (i * Math.PI) / 2;
+        const sx = Math.cos(angle) * size;
+        const sy = Math.sin(angle) * size;
+        const sx2 = Math.cos(angle + Math.PI / 4) * size * 0.35;
+        const sy2 = Math.sin(angle + Math.PI / 4) * size * 0.35;
+        if (i === 0) gctx.moveTo(sx, sy);
+        else gctx.lineTo(sx, sy);
+        gctx.lineTo(sx2, sy2);
+      }
+      gctx.closePath();
+      gctx.fillStyle = color + alpha + ")";
+      gctx.shadowBlur = size * 3;
+      gctx.shadowColor = color + (alpha * 0.8) + ")";
+      gctx.fill();
+      gctx.restore();
+    }
+
+    function tick() {
+      gctx.clearRect(0, 0, gc.width, gc.height);
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vy += 0.008;   // tiny gravity
+        s.rot += s.rotSpeed;
+        s.life -= s.decay;
+        if (s.life <= 0) {
+          sparks.splice(i, 1);
+          continue;
+        }
+        drawStar(s.x, s.y, s.size, s.life, s.color, s.rot);
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Disable on touch devices (distracting, battery drain)
+    window.addEventListener("touchstart", () => {
+      gc.style.display = "none";
+    }, { once: true, passive: true });
+  })();
+
+
   // ── KEYBOARD CLICK SOUND (Web Audio, synthesized) ────────
   const SOUND = (function () {
     let ctx = null;

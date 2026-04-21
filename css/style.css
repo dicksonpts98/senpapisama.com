@@ -71,8 +71,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background:
-    radial-gradient(ellipse at center, var(--beige-light) 0%, var(--beige) 60%, var(--beige-dark) 100%);
+  background: #004721;  /* solid forest green — no radial halo */
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
@@ -90,6 +89,19 @@ body {
 }
 
 .vignette { display: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   MOUSE GLITTER CANVAS — overlays everything, non-interactive
+   ═══════════════════════════════════════════════════════════ */
+#glitter-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
 
 /* HUD Corners */
 .hud-corner {
@@ -162,9 +174,9 @@ body {
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--beige-lighter);
-  border: 1.5px solid var(--green);
-  box-shadow: var(--glow);
+  background: transparent;
+  border: 1.5px solid rgba(214, 214, 214, 0.5);
+  box-shadow: none;
 }
 
 .login-emblem img {
@@ -858,23 +870,23 @@ body {
 
 .lb-close {
   position: absolute; top: 24px; right: 32px;
-  background: var(--beige-lighter);
-  border: 1.5px solid var(--green);
-  color: var(--green);
+  background: #ffffff;
+  border: 1.5px solid #000;
+  color: #000;
   font-size: 24px;
   width: 48px; height: 48px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; z-index: 10;
   transition: all 0.3s;
 }
-.lb-close:hover { background: var(--green); color: var(--beige); }
+.lb-close:hover { background: #000; color: #fff; }
 
 .lb-prev, .lb-next {
   position: absolute; top: 50%;
   transform: translateY(-50%);
-  background: var(--beige-lighter);
-  border: 1.5px solid var(--green);
-  color: var(--green);
+  background: #ffffff;
+  border: 1.5px solid #000;
+  color: #000;
   font-size: 28px;
   width: 48px; height: 64px;
   display: flex; align-items: center; justify-content: center;
@@ -884,8 +896,8 @@ body {
 .lb-prev { left: 24px; }
 .lb-next { right: 24px; }
 .lb-prev:hover, .lb-next:hover {
-  background: var(--green);
-  color: var(--beige);
+  background: #000;
+  color: #fff;
 }
 
 .lb-content {
@@ -929,9 +941,9 @@ body {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 3px;
-  color: var(--green);
+  color: #000;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .lb-title {
@@ -939,7 +951,7 @@ body {
   font-size: 30px;
   font-weight: 700;
   letter-spacing: 3px;
-  color: var(--text);
+  color: #000;
   text-transform: uppercase;
 }
 
@@ -950,10 +962,11 @@ body {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 1.5px;
-  color: var(--green);
-  border: 1px solid var(--green);
+  color: #000;
+  border: 1px solid #000;
   padding: 4px 10px;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
 .lb-counter {
