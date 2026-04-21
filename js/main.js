@@ -597,7 +597,14 @@
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         applyFilter();
-        document.getElementById("gallery-section").scrollIntoView({ behavior: "smooth", block: "start" });
+        // Scroll so the filter bar sits right under the fixed nav and the
+        // first row of the filtered gallery is fully visible (not cropped).
+        const filterSection = document.getElementById("filter-section");
+        const nav = document.querySelector(".nav");
+        const navH = nav ? nav.offsetHeight : 68;
+        const targetY =
+          filterSection.getBoundingClientRect().top + window.pageYOffset - navH - 4;
+        window.scrollTo({ top: targetY, behavior: "smooth" });
       });
       bar.appendChild(btn);
     });
