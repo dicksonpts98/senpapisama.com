@@ -122,7 +122,8 @@
       return ctx;
     }
 
-    function play() {
+    // ── HOVER SOUND: light keyboard tick ──
+    function playHover() {
       const c = ensure();
       if (!c || c.state !== "running") return;
       const now = c.currentTime;
@@ -150,16 +151,54 @@
       o2.start(now + 0.005); o2.stop(now + 0.1);
     }
 
-    function throttledPlay() {
+    // ── CLICK SOUND: heavier mechanical "clack" — noise burst + punchy tone ──
+    function playClick() {
+      const c = ensure();
+      if (!c || c.state !== "running") return;
+      const now = c.currentTime;
+
+      // Short white-noise burst filtered for a "snap"
+      const bufSize = Math.floor(c.sampleRate * 0.05);
+      const buf = c.createBuffer(1, bufSize, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / bufSize);
+      }
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      const bp = c.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = 2800;
+      bp.Q.value = 2;
+      const ng = c.createGain();
+      ng.gain.setValueAtTime(0.18, now);
+      ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+      src.connect(bp).connect(ng).connect(c.destination);
+      src.start(now); src.stop(now + 0.06);
+
+      // Punchy low tone — switch closing / key bottoming-out
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = "triangle";
+      o.frequency.setValueAtTime(260, now);
+      o.frequency.exponentialRampToValueAtTime(70, now + 0.1);
+      g.gain.setValueAtTime(0.09, now);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      o.connect(g).connect(c.destination);
+      o.start(now); o.stop(now + 0.14);
+    }
+
+    function throttledHover() {
       const t = performance.now();
       if (t - lastPlay < 40) return;
       lastPlay = t;
-      play();
+      playHover();
     }
 
     function attachToSelector(sel) {
       document.querySelectorAll(sel).forEach(el => {
-        el.addEventListener("mouseenter", throttledPlay);
+        el.addEventListener("mouseenter", throttledHover);
+        el.addEventListener("click", playClick);
       });
     }
 
@@ -267,13 +306,27 @@
 
 
   // ── CLOCK ────────────────────────────────────────────────
+  // Uses the VISITOR's local browser timezone (not a hard-coded one).
+  // Each viewer sees their own time + their own zone abbreviation.
   function updateClocks() {
     const now = new Date();
-    const time = now.toLocaleTimeString("en-US", { hour12: false });
+    const time = now.toLocaleTimeString([], { hour12: false });
+    // Extract the visitor's timezone abbreviation (e.g. "PDT", "BST", "JST")
+    let tzAbbr = "";
+    try {
+      const parts = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        timeZoneName: "short"
+      }).formatToParts(now);
+      const tzPart = parts.find(p => p.type === "timeZoneName");
+      if (tzPart) tzAbbr = " " + tzPart.value;
+    } catch (e) { /* older browsers */ }
+
+    const display = time + tzAbbr;
     const el1 = document.getElementById("hud-clock");
     const el2 = document.querySelector(".nav-clock");
-    if (el1) el1.textContent = time;
-    if (el2) el2.textContent = time;
+    if (el1) el1.textContent = display;
+    if (el2) el2.textContent = display;
   }
   updateClocks();
   setInterval(updateClocks, 1000);
