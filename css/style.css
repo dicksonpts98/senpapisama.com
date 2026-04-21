@@ -185,7 +185,7 @@ body {
   object-fit: cover;
 }
 
-/* Title — Game-UI style */
+/* Title — 3D embossed metallic game-UI style */
 .login-title {
   font-family: var(--font-display);
   font-size: clamp(40px, 8vw, 82px);
@@ -195,18 +195,63 @@ body {
   position: relative;
   color: var(--green);
   text-transform: uppercase;
+  /* Slight perspective tilt for structural depth */
+  transform: perspective(900px) rotateX(8deg);
+  transform-style: preserve-3d;
+  padding: 6px 0 10px;
 }
 
 .title-glitch {
   position: relative;
   display: inline-block;
   animation: title-breathe 4s ease-in-out infinite;
-  text-shadow: 2px 2px 0 var(--green-dim);
+  /* Metallic silver gradient fill */
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #e8e8e8 28%,
+    #c4c4c4 50%,
+    #ffffff 65%,
+    #a8a8a8 100%
+  );
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Extruded 3D depth — stacked shadows build the side face */
+  filter:
+    drop-shadow(1px 1px 0 #8a8a8a)
+    drop-shadow(2px 2px 0 #707070)
+    drop-shadow(3px 3px 0 #5a5a5a)
+    drop-shadow(4px 4px 0 #454545)
+    drop-shadow(5px 5px 0 #2e2e2e)
+    drop-shadow(6px 6px 0 #1a1a1a)
+    drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
 }
 
 @keyframes title-breathe {
-  0%, 100% { text-shadow: 2px 2px 0 var(--green-dim), 0 0 20px rgba(0,71,33,0.1); }
-  50%      { text-shadow: 2px 2px 0 var(--green-dim), 0 0 36px rgba(0,71,33,0.35); }
+  0%, 100% {
+    transform: translateY(0);
+    filter:
+      drop-shadow(1px 1px 0 #8a8a8a)
+      drop-shadow(2px 2px 0 #707070)
+      drop-shadow(3px 3px 0 #5a5a5a)
+      drop-shadow(4px 4px 0 #454545)
+      drop-shadow(5px 5px 0 #2e2e2e)
+      drop-shadow(6px 6px 0 #1a1a1a)
+      drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
+  }
+  50% {
+    transform: translateY(-2px);
+    filter:
+      drop-shadow(1px 1px 0 #9a9a9a)
+      drop-shadow(2px 2px 0 #808080)
+      drop-shadow(3px 3px 0 #686868)
+      drop-shadow(4px 4px 0 #525252)
+      drop-shadow(5px 5px 0 #3a3a3a)
+      drop-shadow(6px 6px 0 #222222)
+      drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7))
+      drop-shadow(0 0 22px rgba(255, 255, 255, 0.22));
+  }
 }
 
 .login-subtitle {
@@ -292,13 +337,13 @@ body {
 .login-hint {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--text-dim);
+  color: var(--green);
   letter-spacing: 3px;
   opacity: 0;
   animation: fadeInUp 0.6s 2.2s forwards, blink-hint 2.4s 3s infinite;
 }
 @keyframes blink-hint {
-  0%, 100% { opacity: 0.6; } 50% { opacity: 0.2; }
+  0%, 100% { opacity: 0.9; } 50% { opacity: 0.3; }
 }
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
