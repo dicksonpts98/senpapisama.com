@@ -171,8 +171,8 @@
       bp.frequency.value = 2800;
       bp.Q.value = 2;
       const ng = c.createGain();
-      ng.gain.setValueAtTime(0.18, now);
-      ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+      ng.gain.setValueAtTime(0.06, now);
+      ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
       src.connect(bp).connect(ng).connect(c.destination);
       src.start(now); src.stop(now + 0.06);
 
@@ -182,8 +182,8 @@
       o.type = "triangle";
       o.frequency.setValueAtTime(260, now);
       o.frequency.exponentialRampToValueAtTime(70, now + 0.1);
-      g.gain.setValueAtTime(0.09, now);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+      g.gain.setValueAtTime(0.035, now);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
       o.connect(g).connect(c.destination);
       o.start(now); o.stop(now + 0.14);
     }
@@ -211,7 +211,7 @@
     document.addEventListener("keydown",  unlock, { once: true });
     document.addEventListener("touchend", unlock, { once: true });
 
-    return { attachToSelector, play: throttledPlay };
+    return { attachToSelector, play: throttledHover, playClick };
   })();
 
   // ── PARTICLE SYSTEM ──────────────────────────────────────
