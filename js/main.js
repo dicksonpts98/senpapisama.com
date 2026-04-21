@@ -122,10 +122,20 @@
       return ctx;
     }
 
+    // Wakes the AudioContext if browser suspended it. Must be called
+    // from inside a user-gesture handler or the resume is ignored.
+    function wake(c) {
+      if (c && c.state === "suspended" && typeof c.resume === "function") {
+        try { c.resume(); } catch (e) {}
+      }
+    }
+
     // ── HOVER SOUND: light keyboard tick ──
     function playHover() {
       const c = ensure();
-      if (!c || c.state !== "running") return;
+      if (!c) return;
+      wake(c);
+      if (c.state !== "running") return;
       const now = c.currentTime;
 
       // High-frequency tick — keytop snap
@@ -154,7 +164,21 @@
     // ── CLICK SOUND: heavier mechanical "clack" — noise burst + punchy tone ──
     function playClick() {
       const c = ensure();
-      if (!c || c.state !== "running") return;
+      if (!c) return;
+      wake(c);
+      // If first-ever gesture: schedule the sound once context resumes.
+      if (c.state !== "running") {
+        const tryPlay = () => {
+          if (c.state === "running") { actuallyPlayClick(c); }
+          else { setTimeout(tryPlay, 30); }
+        };
+        setTimeout(tryPlay, 30);
+        return;
+      }
+      actuallyPlayClick(c);
+    }
+
+    function actuallyPlayClick(c) {
       const now = c.currentTime;
 
       // Short white-noise burst filtered for a "snap"
