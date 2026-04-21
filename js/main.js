@@ -166,6 +166,42 @@
     setupAbout();
     setupNavSections();
     animateStats();
+    setup3DScrollEffects();
+  }
+
+
+  // ── 3D MOUSE TILT on cards + scroll parallax ─────────────
+  function setup3DScrollEffects() {
+    const cards = document.querySelectorAll(".art-card, .booth-card");
+    cards.forEach(card => {
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const cx = (e.clientX - r.left) / r.width - 0.5;
+        const cy = (e.clientY - r.top) / r.height - 0.5;
+        const rx = (-cy * 8).toFixed(2);
+        const ry = (cx * 10).toFixed(2);
+        card.style.transform =
+          `translateY(-10px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
+    });
+
+    // Hero parallax on scroll
+    const heroBg = document.querySelector(".hero-bg");
+    const heroContent = document.querySelector(".hero-content");
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (heroBg)      heroBg.style.transform      = `translateY(${y * 0.35}px) scale(1.05)`;
+        if (heroContent) heroContent.style.transform = `translateY(${y * 0.18}px)`;
+        ticking = false;
+      });
+    }, { passive: true });
   }
 
 
@@ -354,7 +390,7 @@
 
     ARTWORKS.forEach((art, i) => {
       const card = document.createElement("div");
-      card.className = "art-card";
+      card.className = "art-card" + (art.layout === "wide" ? " art-card-wide" : "");
       card.dataset.index = i;
       card.innerHTML = `
         <div class="art-card-img-wrap">
@@ -429,7 +465,7 @@
 
     document.querySelector(".lb-category").textContent = art.series;
     document.querySelector(".lb-title").textContent = art.title;
-    document.querySelector(".lb-description").textContent = art.description;
+    document.querySelector(".lb-description").textContent = "";
     document.querySelector(".lb-counter").textContent = `${currentLbIndex + 1} / ${filteredIndices.length}`;
 
     const tagsEl = document.querySelector(".lb-tags");

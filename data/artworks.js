@@ -39,10 +39,10 @@ const ARTWORKS = [
   { title: "Ai Hoshino",        file: "5_Ai Hoshino.png",        series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
   { title: "Dragon's Maid",     file: "5_Dragon's Maid.png",     series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
   { title: "Dark Magician Girl",file: "15_DMG.jpg",              series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["yu-gi-oh"] },
+  { title: "The Fragrant Flower Blooms With Dignity", file: "10_Flower.png", series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
 
   // ── ORIGINAL ARTS ────────────────────────────────────────
-  { title: "Flower",            file: "10_Flower.png",           series: "Original Arts", description: "Edit this description — tell the story behind this piece.", tags: ["original"] },
-  { title: "Kaitlynn",          file: "5_Kaitlynn.png",          series: "Original Arts", description: "Edit this description — tell the story behind this piece.", tags: ["original"] },
+  { title: "Kaitlynn",          file: "5_Kaitlynn.png",          series: "Original Arts", description: "Edit this description — tell the story behind this piece.", tags: ["original"], layout: "wide" },
   { title: "Isabelle",          file: "5_Isabelle.png",          series: "Original Arts", description: "Edit this description — tell the story behind this piece.", tags: ["original"] },
 
   // ── BOCCHI THE ROCK ──────────────────────────────────────
@@ -51,7 +51,7 @@ const ARTWORKS = [
   { title: "Kita",              file: "0_Kita.png",              series: "Bocchi The Rock", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
   { title: "Nijika",            file: "0_Nijika poster.jpg",     series: "Bocchi The Rock", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
   { title: "Ryo",               file: "0_Ryo poster.jpg",        series: "Bocchi The Rock", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
-  { title: "Bocchi Main",       file: "10_Bocchi main.png",      series: "Bocchi The Rock", description: "Edit this description — tell the story behind this piece.", tags: ["key visual"] },
+  { title: "Bocchi Main",       file: "10_Bocchi main.png",      series: "Bocchi The Rock", description: "Edit this description — tell the story behind this piece.", tags: ["key visual"], layout: "wide" },
 
   // ── ONE PIECE ────────────────────────────────────────────
   { title: "Nami",              file: "15_Nami.png",             series: "One Piece", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
@@ -108,7 +108,7 @@ const ARTWORKS = [
 
   // ── HITMAN REBORN ────────────────────────────────────────
   { title: "Gokudera",          file: "10_Gokudera.png",         series: "Hitman Reborn", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
-  { title: "Reborn × Haikyuu",  file: "10_Reborn X Haikyuu.png", series: "Hitman Reborn", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "crossover"] },
+  { title: "Reborn × Haikyuu",  file: "10_Reborn X Haikyuu.png", series: "Hitman Reborn", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "crossover"], layout: "wide" },
 
   // ── ZENLESS ZONE ZERO ────────────────────────────────────
   { title: "Burnice",           file: "15_Burnice.png",          series: "Zenless Zone Zero", description: "Edit this description — tell the story behind this piece.", tags: ["game"] },
