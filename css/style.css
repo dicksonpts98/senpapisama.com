@@ -89,10 +89,7 @@ body {
   );
 }
 
-.vignette {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 49, 22, 0.22) 100%);
-}
+.vignette { display: none; }
 
 /* HUD Corners */
 .hud-corner {
@@ -390,7 +387,7 @@ body {
 .nav-hud {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--text-dim);
+  color: #000;
   letter-spacing: 2px;
 }
 
@@ -440,7 +437,7 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 6px;
-  color: var(--green);
+  color: #000;
   margin-bottom: 28px;
   opacity: 0;
   animation: fadeInUp 0.8s 0.3s forwards;
@@ -503,13 +500,13 @@ body {
   font-family: var(--font-display);
   font-size: 40px;
   font-weight: 700;
-  color: var(--green);
+  color: #000;
 }
 .stat-label {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 3px;
-  color: var(--text-dim);
+  color: #000;
 }
 
 .hero-scroll-hint {
@@ -525,7 +522,7 @@ body {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 4px;
-  color: var(--text-dim);
+  color: #000;
 }
 .scroll-arrow {
   width: 14px; height: 14px;
@@ -644,9 +641,17 @@ body {
 }
 
 .art-card:hover {
-  transform: translateY(-10px) rotateX(3deg) rotateY(-3deg) scale(1.015);
+  animation: heartbeat 1.4s ease-in-out infinite;
   box-shadow: var(--lift-3);
   z-index: 2;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.025); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.025); }
+  70%      { transform: scale(1); }
 }
 
 /* Wide cards span 2 columns, show full image (no cropping) */
@@ -671,8 +676,7 @@ body {
   transform: translateZ(0);
 }
 .art-card:hover .art-card-img {
-  transform: scale(1.06) translateZ(30px);
-  filter: brightness(1.06) contrast(1.03);
+  filter: brightness(1.05) contrast(1.02);
 }
 
 .art-card-overlay {
@@ -754,7 +758,7 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 4px;
-  color: var(--text-dim);
+  color: #000;
   text-transform: uppercase;
 }
 
@@ -780,14 +784,12 @@ body {
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s;
 }
 
-.booth-grid { perspective: 1600px; }
 .booth-card:hover {
-  transform: translateY(-10px) rotateX(3deg) rotateY(-3deg) scale(1.015);
+  animation: heartbeat 1.4s ease-in-out infinite;
   box-shadow: var(--lift-3);
 }
 .booth-card:hover .booth-card-img {
-  transform: scale(1.06) translateZ(30px);
-  filter: brightness(1.06) contrast(1.03);
+  filter: brightness(1.05) contrast(1.02);
 }
 
 .booth-card.visible {
@@ -820,7 +822,7 @@ body {
   justify-content: center;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--text-dim);
+  color: #000;
   letter-spacing: 2px;
   text-align: center;
   padding: 20px;
@@ -960,7 +962,7 @@ body {
   transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--text-dim);
+  color: #000;
   letter-spacing: 3px;
 }
 
@@ -994,7 +996,7 @@ body {
   position: absolute;
   top: 14px; right: 20px;
   background: none; border: none;
-  color: var(--text-dim);
+  color: #000;
   font-size: 28px;
   cursor: pointer;
   transition: color 0.3s;
@@ -1032,7 +1034,7 @@ body {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 4px;
-  color: var(--green);
+  color: #000;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -1041,7 +1043,7 @@ body {
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.75;
-  color: var(--text-soft);
+  color: #000;
   font-weight: 400;
   white-space: pre-line;
   margin: 8px 0;
@@ -1096,7 +1098,7 @@ body {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 3px;
-  color: var(--text-dim);
+  color: #000;
   text-transform: uppercase;
 }
 

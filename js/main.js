@@ -9,6 +9,71 @@
   const FILTERS = CATEGORY_ORDER;
   const SERIES = FILTERS.filter(f => f !== "ALL WORKS");
 
+  // ── KEYBOARD CLICK SOUND (Web Audio, synthesized) ────────
+  const SOUND = (function () {
+    let ctx = null;
+    let lastPlay = 0;
+
+    function ensure() {
+      if (ctx) return ctx;
+      try { ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch (e) { return null; }
+      return ctx;
+    }
+
+    function play() {
+      const c = ensure();
+      if (!c || c.state !== "running") return;
+      const now = c.currentTime;
+
+      // High-frequency tick — keytop snap
+      const o1 = c.createOscillator();
+      const g1 = c.createGain();
+      o1.type = "square";
+      o1.frequency.setValueAtTime(2400, now);
+      o1.frequency.exponentialRampToValueAtTime(900, now + 0.02);
+      g1.gain.setValueAtTime(0.055, now);
+      g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+      o1.connect(g1).connect(c.destination);
+      o1.start(now); o1.stop(now + 0.05);
+
+      // Low thock — key-bottom landing
+      const o2 = c.createOscillator();
+      const g2 = c.createGain();
+      o2.type = "triangle";
+      o2.frequency.setValueAtTime(180, now + 0.005);
+      o2.frequency.exponentialRampToValueAtTime(60, now + 0.06);
+      g2.gain.setValueAtTime(0.035, now + 0.005);
+      g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+      o2.connect(g2).connect(c.destination);
+      o2.start(now + 0.005); o2.stop(now + 0.1);
+    }
+
+    function throttledPlay() {
+      const t = performance.now();
+      if (t - lastPlay < 40) return;
+      lastPlay = t;
+      play();
+    }
+
+    function attachToSelector(sel) {
+      document.querySelectorAll(sel).forEach(el => {
+        el.addEventListener("mouseenter", throttledPlay);
+      });
+    }
+
+    // Unlock audio context on first user gesture
+    function unlock() {
+      const c = ensure();
+      if (c && c.state === "suspended") c.resume();
+    }
+    document.addEventListener("click",    unlock, { once: true });
+    document.addEventListener("keydown",  unlock, { once: true });
+    document.addEventListener("touchend", unlock, { once: true });
+
+    return { attachToSelector, play: throttledPlay };
+  })();
+
   // ── PARTICLE SYSTEM ──────────────────────────────────────
   const canvas = document.getElementById("particle-canvas");
   const ctx = canvas.getContext("2d");
@@ -150,6 +215,7 @@
   }
 
   enterBtn.addEventListener("click", enterPortfolio);
+  enterBtn.addEventListener("mouseenter", SOUND.play);
   document.addEventListener("keydown", e => {
     if (e.key === "Enter" && !loginScreen.classList.contains("gone")) {
       enterPortfolio();
@@ -170,25 +236,8 @@
   }
 
 
-  // ── 3D MOUSE TILT on cards + scroll parallax ─────────────
+  // ── SCROLL PARALLAX ──────────────────────────────────────
   function setup3DScrollEffects() {
-    const cards = document.querySelectorAll(".art-card, .booth-card");
-    cards.forEach(card => {
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        const cx = (e.clientX - r.left) / r.width - 0.5;
-        const cy = (e.clientY - r.top) / r.height - 0.5;
-        const rx = (-cy * 8).toFixed(2);
-        const ry = (cx * 10).toFixed(2);
-        card.style.transform =
-          `translateY(-10px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
-      });
-      card.addEventListener("mouseleave", () => {
-        card.style.transform = "";
-      });
-    });
-
-    // Hero parallax on scroll
     const heroBg = document.querySelector(".hero-bg");
     const heroContent = document.querySelector(".hero-content");
     let ticking = false;
@@ -202,6 +251,18 @@
         ticking = false;
       });
     }, { passive: true });
+
+    // Attach key-click sound to all portfolio buttons now that they exist
+    SOUND.attachToSelector([
+      ".nav-link",
+      ".filter-btn",
+      ".nav-brand",
+      ".lb-close",
+      ".lb-prev",
+      ".lb-next",
+      ".about-close",
+      ".social-link"
+    ].join(","));
   }
 
 
