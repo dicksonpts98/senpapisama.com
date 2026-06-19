@@ -9,7 +9,7 @@
 //    - description: your caption / story behind the piece
 //    - tags:        optional tags
 //
-//  The 14 categories (spelled exactly as shown):
+//  The 15 categories (spelled exactly as shown):
 //    ALL WORKS (auto — displays every piece)
 //    Featured
 //    Original Arts
@@ -19,6 +19,7 @@
 //    KPOP Demon Hunter
 //    Street Fighters
 //    Advent Hololive
+//    Council Hololive
 //    Justice Hololive
 //    Genshin Impact
 //    Hitman Reborn
@@ -92,6 +93,11 @@ const ARTWORKS = [
 
   // ── ADVENT HOLOLIVE ──────────────────────────────────────
   { title: "Shiori Novella",    file: "15_Shiori Nevella.jpg",   series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+  { title: "Nerissa",           file: "15_Nerissa.jpg",          series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+  { title: "Koseki",            file: "15_Koseki.jpg",           series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+
+  // ── COUNCIL HOLOLIVE ─────────────────────────────────────
+  { title: "Kronii",            file: "15_Kronii.jpg",           series: "Council Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
 
   // ── JUSTICE HOLOLIVE ─────────────────────────────────────
   { title: "Elizabeth",         file: "15_Elizabeth.jpg",        series: "Justice Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
@@ -135,6 +141,7 @@ const CATEGORY_ORDER = [
   "KPOP Demon Hunter",
   "Street Fighters",
   "Advent Hololive",
+  "Council Hololive",
   "Justice Hololive",
   "Genshin Impact",
   "Hitman Reborn",
