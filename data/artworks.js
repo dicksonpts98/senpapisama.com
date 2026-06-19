@@ -28,6 +28,11 @@
 // ============================================================
 
 const ARTWORKS = [
+  // ── NEW RELEASES (newest art goes here, on top) ──────────
+  { title: "Kronii",            file: "15_Kronii.jpg",           series: "Council Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+  { title: "Nerissa",           file: "15_Nerissa.jpg",          series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+  { title: "Koseki",            file: "15_Koseki.jpg",           series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+
   // ── FEATURED ─────────────────────────────────────────────
   { title: "Baiken",            file: "10_Baiken.jpg",           series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["game"] },
   { title: "Blue Lock",         file: "10_Blue Lock.jpg",        series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
@@ -92,12 +97,11 @@ const ARTWORKS = [
   { title: "Mai",               file: "15_Mai.jpg",              series: "Street Fighters", description: "Edit this description — tell the story behind this piece.", tags: ["game"] },
 
   // ── ADVENT HOLOLIVE ──────────────────────────────────────
+  // (Nerissa & Koseki live in NEW RELEASES at the top of this file)
   { title: "Shiori Novella",    file: "15_Shiori Nevella.jpg",   series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
-  { title: "Nerissa",           file: "15_Nerissa.jpg",          series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
-  { title: "Koseki",            file: "15_Koseki.jpg",           series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
 
   // ── COUNCIL HOLOLIVE ─────────────────────────────────────
-  { title: "Kronii",            file: "15_Kronii.jpg",           series: "Council Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
+  // (Kronii lives in NEW RELEASES at the top of this file)
 
   // ── JUSTICE HOLOLIVE ─────────────────────────────────────
   { title: "Elizabeth",         file: "15_Elizabeth.jpg",        series: "Justice Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
