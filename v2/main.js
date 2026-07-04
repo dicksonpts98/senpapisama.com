@@ -133,13 +133,29 @@
     clearTimeout(resizeT);
     resizeT = setTimeout(() => {
       if (colCount() !== currentCols) buildMasonry();
+      if (boothColCount() !== boothCols) buildBooth();
     }, 180);
   });
 
-  // ── Table Display ────────────────────────────────────────
-  (function buildBooth() {
+  // ── Table Display (masonry — packs tight, no row gaps) ───
+  const BOOTH = (typeof BOOTH_PHOTOS !== "undefined" ? BOOTH_PHOTOS : []);
+  let boothCols = boothColCount();
+
+  function boothColCount() { return window.innerWidth <= 768 ? 1 : 2; }
+
+  function buildBooth() {
     const grid = $("#booth-grid");
-    (typeof BOOTH_PHOTOS !== "undefined" ? BOOTH_PHOTOS : []).forEach(photo => {
+    grid.innerHTML = "";
+    const n = boothColCount();
+    boothCols = n;
+    const cols = [];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement("div");
+      c.className = "booth-col";
+      grid.appendChild(c);
+      cols.push(c);
+    }
+    BOOTH.forEach((photo, i) => {
       const item = document.createElement("div");
       item.className = "booth-item";
       item.innerHTML = `
@@ -147,10 +163,11 @@
              alt="${photo.alt || ""}" loading="lazy" decoding="async">
       `;
       item.addEventListener("click", () => openBoothLightbox(photo));
-      grid.appendChild(item);
+      cols[i % n].appendChild(item);   // round-robin fills columns evenly
       revealObserver.observe(item);
     });
-  })();
+  }
+  buildBooth();
 
   // ── Section switching (same sections as v1) ──────────────
   const gallerySection = $("#gallery-section");
