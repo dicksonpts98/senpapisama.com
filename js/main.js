@@ -9,10 +9,14 @@
   const FILTERS = CATEGORY_ORDER;
   const SERIES = FILTERS.filter(f => f !== "ALL WORKS");
 
+  const REDUCE_MOTION = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   // ── MOUSE GLITTER TRAIL ──────────────────────────────────
   (function initGlitter() {
     const gc = document.getElementById("glitter-canvas");
     if (!gc) return;
+    if (REDUCE_MOTION) { gc.style.display = "none"; return; }
     const gctx = gc.getContext("2d");
 
     function resize() {
@@ -382,7 +386,10 @@
   setTimeout(() => typewriter(subtitle, SITE_CONFIG.tagline, 70), 600);
   setTimeout(() => { loadingFill.style.width = "100%"; }, 300);
 
+  let entered = false;
   function enterPortfolio() {
+    if (entered) return;   // guard against double-fire (click + Enter key)
+    entered = true;
     loginScreen.classList.add("exiting");
     setTimeout(() => {
       loginScreen.classList.add("gone");
@@ -415,21 +422,32 @@
   }
 
 
-  // ── SCROLL PARALLAX ──────────────────────────────────────
+  // ── SCROLL PARALLAX + BACK-TO-TOP ────────────────────────
   function setup3DScrollEffects() {
     const heroBg = document.querySelector(".hero-bg");
     const heroContent = document.querySelector(".hero-content");
+    const topBtn = document.getElementById("back-to-top");
     let ticking = false;
     window.addEventListener("scroll", () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        if (heroBg)      heroBg.style.transform      = `translateY(${y * 0.35}px) scale(1.05)`;
-        if (heroContent) heroContent.style.transform = `translateY(${y * 0.18}px)`;
+        if (!REDUCE_MOTION) {
+          if (heroBg)      heroBg.style.transform      = `translateY(${y * 0.35}px) scale(1.05)`;
+          if (heroContent) heroContent.style.transform = `translateY(${y * 0.18}px)`;
+        }
+        // Back-to-top appears after ~1.5 screens of scrolling
+        if (topBtn) topBtn.classList.toggle("show", y > window.innerHeight * 1.5);
         ticking = false;
       });
     }, { passive: true });
+
+    if (topBtn) {
+      topBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
 
     // Attach key-click sound to all portfolio buttons now that they exist
     SOUND.attachToSelector([
@@ -440,7 +458,8 @@
       ".lb-prev",
       ".lb-next",
       ".about-close",
-      ".social-link"
+      ".about-social-link",
+      "#back-to-top"
     ].join(","));
   }
 
@@ -486,6 +505,11 @@
   function openBoothLightbox(photo) {
     const lb = document.getElementById("lightbox");
     const img = document.getElementById("lb-image");
+    // Booth photos are single-view: hide prev/next (they'd crash on an
+    // empty filteredIndices list) — restored by openLightbox()
+    filteredIndices = [];
+    document.getElementById("lb-prev").style.display = "none";
+    document.getElementById("lb-next").style.display = "none";
     img.src = `images/booth/${encodeURIComponent(photo.file)}`;
     img.alt = photo.alt || "";
     img.style.animation = "none";
@@ -524,21 +548,25 @@
         document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
         link.classList.add("active");
 
+        let scrollTarget = null;
         if (target === "gallery") {
           gallerySection.hidden = false;
           filterSection.hidden = false;
           boothSection.hidden = true;
+          scrollTarget = filterSection;
         } else if (target === "table") {
           gallerySection.hidden = true;
           filterSection.hidden = true;
           boothSection.hidden = false;
+          scrollTarget = boothSection;
         }
 
-        // Scroll past hero so the switched content is visible
-        window.scrollTo({
-          top: window.innerHeight * 0.9,
-          behavior: "smooth"
-        });
+        // Land precisely on the switched section, just under the fixed nav
+        if (scrollTarget) {
+          const navH = document.querySelector(".nav").offsetHeight;
+          const y = scrollTarget.getBoundingClientRect().top + window.pageYOffset - navH - 4;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
       });
     });
   }
@@ -551,7 +579,8 @@
     if (featured.length > 0) {
       let idx = 0;
       function setHeroBg() {
-        heroBg.style.backgroundImage = `url('images/${encodeURIComponent(featured[idx].file)}')`;
+        // double quotes — filenames with apostrophes (Dragon's Maid) break url('')
+        heroBg.style.backgroundImage = `url("images/${encodeURIComponent(featured[idx].file)}")`;
         idx = (idx + 1) % featured.length;
       }
       setHeroBg();
@@ -591,7 +620,10 @@
     FILTERS.forEach(label => {
       const btn = document.createElement("button");
       btn.className = "filter-btn" + (label === activeFilter ? " active" : "");
-      btn.textContent = label.toUpperCase();
+      const count = label === "ALL WORKS"
+        ? ARTWORKS.length
+        : ARTWORKS.filter(a => a.series === label).length;
+      btn.innerHTML = `${label.toUpperCase()}<span class="filter-count">${count}</span>`;
       btn.addEventListener("click", () => {
         activeFilter = label;
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -612,16 +644,19 @@
 
   function applyFilter() {
     const cards = document.querySelectorAll(".art-card");
-    cards.forEach((card, i) => {
+    let shown = 0;   // stagger by visible position, capped — not by global index
+    cards.forEach(card => {
       const artwork = ARTWORKS[card.dataset.index];
       const show =
         activeFilter === "ALL WORKS" ||
         artwork.series === activeFilter;
 
       if (show) {
+        const delay = Math.min(shown * 25, 350);
+        shown++;
         card.style.display = "";
         card.classList.remove("visible");
-        setTimeout(() => card.classList.add("visible"), i * 30);
+        setTimeout(() => card.classList.add("visible"), delay);
       } else {
         card.style.display = "none";
         card.classList.remove("visible");
@@ -644,7 +679,7 @@
           <img class="art-card-img art-card-skeleton"
                data-src="images/${encodeURIComponent(art.file)}"
                alt="${art.title}"
-               loading="lazy">
+               loading="lazy" decoding="async">
           <div class="art-card-overlay"></div>
           <div class="art-card-info">
             <div class="art-card-category">${art.series}</div>
@@ -695,6 +730,8 @@
     filteredIndices = getFilteredIndices();
     currentLbIndex = filteredIndices.indexOf(index);
     if (currentLbIndex === -1) currentLbIndex = 0;
+    document.getElementById("lb-prev").style.display = "";
+    document.getElementById("lb-next").style.display = "";
     showLightboxItem();
     document.getElementById("lightbox").classList.add("active");
     document.body.style.overflow = "hidden";
@@ -717,6 +754,15 @@
 
     const tagsEl = document.querySelector(".lb-tags");
     tagsEl.innerHTML = (art.tags || []).map(t => `<span class="lb-tag">${t}</span>`).join("");
+
+    // Preload neighbours so prev/next feels instant
+    [currentLbIndex - 1, currentLbIndex + 1].forEach(n => {
+      const idx = filteredIndices[(n + filteredIndices.length) % filteredIndices.length];
+      if (idx !== undefined) {
+        const pre = new Image();
+        pre.src = `images/${encodeURIComponent(ARTWORKS[idx].file)}`;
+      }
+    });
   }
 
   function closeLightbox() {
@@ -726,10 +772,12 @@
 
   document.getElementById("lb-close").addEventListener("click", closeLightbox);
   document.getElementById("lb-prev").addEventListener("click", () => {
+    if (!filteredIndices.length) return;
     currentLbIndex = (currentLbIndex - 1 + filteredIndices.length) % filteredIndices.length;
     showLightboxItem();
   });
   document.getElementById("lb-next").addEventListener("click", () => {
+    if (!filteredIndices.length) return;
     currentLbIndex = (currentLbIndex + 1) % filteredIndices.length;
     showLightboxItem();
   });
@@ -737,6 +785,7 @@
   document.addEventListener("keydown", e => {
     if (!document.getElementById("lightbox").classList.contains("active")) return;
     if (e.key === "Escape") closeLightbox();
+    if (!filteredIndices.length) return;
     if (e.key === "ArrowLeft") {
       currentLbIndex = (currentLbIndex - 1 + filteredIndices.length) % filteredIndices.length;
       showLightboxItem();
@@ -786,16 +835,17 @@
         document.body.style.overflow = "";
       }
     });
+
+    // Escape closes About too (previously only the lightbox)
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && overlay.classList.contains("active")) {
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
   }
 
   document.getElementById("nav-home").addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-
-
-  // ── SCROLL EFFECTS (nav stays sticky — no auto-hide) ─────
-  window.addEventListener("scroll", () => {
-    const hero = document.querySelector(".hero-bg");
-    if (hero) hero.style.transform = `scale(1.1) translateY(${window.scrollY * 0.3}px)`;
-  }, { passive: true });
 })();

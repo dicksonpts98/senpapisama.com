@@ -421,7 +421,10 @@ body {
 
 .hero {
   position: relative;
-  height: 100vh;
+  /* 72vh instead of 100vh — the first row of art peeks above the fold,
+     which is the strongest cue for visitors to keep scrolling */
+  height: 72vh;
+  min-height: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -564,6 +567,8 @@ body {
    FILTER BAR
    ═══════════════════════════════════════════════════════════ */
 
+.filter-section[hidden] { display: none; }
+
 .filter-section {
   position: sticky;
   top: 68px;
@@ -700,6 +705,7 @@ body {
 }
 .art-card:hover .art-card-img {
   filter: brightness(1.05) contrast(1.02);
+  transform: scale(1.05);   /* subtle zoom — tactile, draws the eye in */
 }
 
 .art-card-overlay {
@@ -781,7 +787,8 @@ body {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 4px;
-  color: #000;
+  color: var(--green);   /* silver — black was invisible on emerald bg */
+  opacity: 0.8;
   text-transform: uppercase;
 }
 
@@ -1147,7 +1154,8 @@ body {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 3px;
-  color: #000;
+  color: var(--green);   /* silver — black was illegible on dark emerald */
+  opacity: 0.85;
   text-transform: uppercase;
 }
 
@@ -1206,4 +1214,57 @@ body {
   .art-card-info { padding: 14px; }
   .art-card-title { font-size: 14px; letter-spacing: 1px; }
   .art-card-category { font-size: 8px; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   FILTER COUNTS + BACK TO TOP + ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════ */
+
+.filter-count {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 400;
+  opacity: 0.55;
+  margin-left: 5px;
+  letter-spacing: 0;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 46px; height: 46px;
+  z-index: 900;
+  background: linear-gradient(180deg, #e8e8e8 0%, #b5b5b5 100%);
+  border: 1.5px solid rgba(0,0,0,0.5);
+  border-radius: 3px;
+  color: #000;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--lift-2), var(--bevel);
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.25s ease;
+}
+.back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--lift-3), var(--bevel);
+}
+
+/* Respect users who ask the OS for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
 }

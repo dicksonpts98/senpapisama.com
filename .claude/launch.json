@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wusensei",
+      "runtimeExecutable": "/Library/Developer/CommandLineTools/usr/bin/python3",
+      "runtimeArgs": ["/tmp/wusensei-site/serve.py"],
+      "port": 3000
+    }
+  ]
+}
