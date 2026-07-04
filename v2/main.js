@@ -109,7 +109,7 @@
       fig.innerHTML = `
         <div class="piece-frame">
           <img class="piece-img loading"
-               src="../images/${encodeURIComponent(x.art.file)}"
+               src="/images/${encodeURIComponent(x.art.file)}"
                alt="${x.art.title.replace(/"/g, "&quot;")}"
                loading="lazy" decoding="async">
         </div>
@@ -143,7 +143,7 @@
       const item = document.createElement("div");
       item.className = "booth-item";
       item.innerHTML = `
-        <img src="../images/booth/${encodeURIComponent(photo.file)}"
+        <img src="/images/booth/${encodeURIComponent(photo.file)}"
              alt="${photo.alt || ""}" loading="lazy" decoding="async">
       `;
       item.addEventListener("click", () => openBoothLightbox(photo));
@@ -249,7 +249,7 @@
     lbList = [];
     lbPrev.style.display = "none";
     lbNext.style.display = "none";
-    lbImage.src = `../images/booth/${encodeURIComponent(photo.file)}`;
+    lbImage.src = `/images/booth/${encodeURIComponent(photo.file)}`;
     lbImage.alt = photo.alt || "";
     restartLbAnim();
     $(".lb-series").textContent = "Table Display";
@@ -268,7 +268,7 @@
 
   function showLb() {
     const art = lbList[lbIndex].art;
-    lbImage.src = `../images/${encodeURIComponent(art.file)}`;
+    lbImage.src = `/images/${encodeURIComponent(art.file)}`;
     lbImage.alt = art.title;
     restartLbAnim();
     $(".lb-series").textContent = art.series;
@@ -277,7 +277,7 @@
     // preload neighbours for instant arrows
     [lbIndex - 1, lbIndex + 1].forEach(k => {
       const item = lbList[(k + lbList.length) % lbList.length];
-      if (item) { const p = new Image(); p.src = `../images/${encodeURIComponent(item.art.file)}`; }
+      if (item) { const p = new Image(); p.src = `/images/${encodeURIComponent(item.art.file)}`; }
     });
   }
 
