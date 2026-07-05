@@ -84,10 +84,49 @@
     });
   }, { threshold: 0.06, rootMargin: "80px" });
 
+  // Display priority for ALL WORKS: Bleach, Hololive, Featured,
+  // One Piece, then everything else in CATEGORY_ORDER sequence.
+  const SECTION_PRIORITY = [
+    "Bleach",
+    "Advent Hololive",
+    "Council Hololive",
+    "Justice Hololive",
+    "Featured",
+    "One Piece"
+  ];
+  function seriesRank(s) {
+    const p = SECTION_PRIORITY.indexOf(s);
+    if (p !== -1) return p;
+    return SECTION_PRIORITY.length + CATEGORY_ORDER.indexOf(s);
+  }
+
   function filteredList() {
     return ARTWORKS
       .map((a, i) => ({ art: a, index: i }))
-      .filter(x => activeFilter === "ALL WORKS" || x.art.series === activeFilter);
+      .filter(x => activeFilter === "ALL WORKS" || x.art.series === activeFilter)
+      .sort((a, b) => seriesRank(a.art.series) - seriesRank(b.art.series));
+  }
+
+  function makePiece(x, i, wide) {
+    const fig = document.createElement("figure");
+    fig.className = "piece" + (wide ? " piece-wide" : "");
+    fig.innerHTML = `
+      <div class="piece-frame">
+        <img class="piece-img loading"
+             src="/images/${encodeURIComponent(x.art.file)}"
+             alt="${x.art.title.replace(/"/g, "&quot;")}"
+             loading="lazy" decoding="async">
+      </div>
+      <figcaption class="piece-cap">
+        <span class="piece-title">${x.art.title}</span>
+        <span class="piece-series">${x.art.series}</span>
+      </figcaption>
+    `;
+    const img = fig.querySelector("img");
+    img.addEventListener("load", () => img.classList.remove("loading"));
+    fig.addEventListener("click", () => openLightbox(i));
+    revealObserver.observe(fig);
+    return fig;
   }
 
   function buildMasonry() {
@@ -95,35 +134,38 @@
     wrap.innerHTML = "";
     const n = colCount();
     currentCols = n;
-    const cols = [];
-    for (let i = 0; i < n; i++) {
-      const c = document.createElement("div");
-      c.className = "m-col";
-      wrap.appendChild(c);
-      cols.push(c);
+    const list = filteredList();
+
+    // Walk the list in bands: normal pieces flow into masonry columns;
+    // a wide (horizontal) piece breaks the band and takes the full row.
+    let buffer = [];   // [{x, i}]
+    function flushBand() {
+      if (!buffer.length) return;
+      const band = document.createElement("div");
+      band.className = "m-band";
+      const cols = [];
+      for (let c = 0; c < n; c++) {
+        const col = document.createElement("div");
+        col.className = "m-col";
+        band.appendChild(col);
+        cols.push(col);
+      }
+      buffer.forEach((entry, k) => {
+        cols[k % n].appendChild(makePiece(entry.x, entry.i, false));
+      });
+      wrap.appendChild(band);
+      buffer = [];
     }
 
-    filteredList().forEach((x, i) => {
-      const fig = document.createElement("figure");
-      fig.className = "piece";
-      fig.innerHTML = `
-        <div class="piece-frame">
-          <img class="piece-img loading"
-               src="/images/${encodeURIComponent(x.art.file)}"
-               alt="${x.art.title.replace(/"/g, "&quot;")}"
-               loading="lazy" decoding="async">
-        </div>
-        <figcaption class="piece-cap">
-          <span class="piece-title">${x.art.title}</span>
-          <span class="piece-series">${x.art.series}</span>
-        </figcaption>
-      `;
-      const img = fig.querySelector("img");
-      img.addEventListener("load", () => img.classList.remove("loading"));
-      fig.addEventListener("click", () => openLightbox(i));
-      cols[i % n].appendChild(fig);      // round-robin keeps newest on the top row
-      revealObserver.observe(fig);
+    list.forEach((x, i) => {
+      if (x.art.layout === "wide") {
+        flushBand();
+        wrap.appendChild(makePiece(x, i, true));   // full-width showcase row
+      } else {
+        buffer.push({ x, i });
+      }
     });
+    flushBand();
   }
   buildMasonry();
 

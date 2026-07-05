@@ -229,6 +229,11 @@ body {
 
 .masonry {
   display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.m-band {
+  display: flex;
   gap: 22px;
   align-items: flex-start;
 }
@@ -239,6 +244,11 @@ body {
   gap: 22px;
   min-width: 0;
 }
+
+/* Horizontal pieces take the full row — cinematic showcase */
+.piece-wide { width: 100%; }
+.piece-wide .piece-title { font-size: 16px; }
+.piece-wide .piece-series { font-size: 11px; }
 
 .piece {
   cursor: pointer;
@@ -566,7 +576,7 @@ body {
   .nav-link { padding: 8px 11px; font-size: 12px; }
   .filters-wrap { top: 60px; }
   .hero { padding-top: 120px; }
-  .masonry, .m-col, .booth-grid, .booth-col { gap: 12px; }
+  .masonry, .m-band, .m-col, .booth-grid, .booth-col { gap: 12px; }
   .lb-arrow { width: 40px; height: 40px; }
   .lb-prev { left: 10px; }
   .lb-next { right: 10px; }
