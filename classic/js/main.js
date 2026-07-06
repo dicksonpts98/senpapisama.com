@@ -476,7 +476,7 @@
       card.innerHTML = `
         <div class="booth-card-img-wrap">
           <img class="booth-card-img"
-               src="images/booth/${encodeURIComponent(photo.file)}"
+               src="/images/booth/${encodeURIComponent(photo.file)}"
                alt="${photo.alt || ""}"
                loading="lazy"
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -510,7 +510,7 @@
     filteredIndices = [];
     document.getElementById("lb-prev").style.display = "none";
     document.getElementById("lb-next").style.display = "none";
-    img.src = `images/booth/${encodeURIComponent(photo.file)}`;
+    img.src = `/images/booth/${encodeURIComponent(photo.file)}`;
     img.alt = photo.alt || "";
     img.style.animation = "none";
     img.offsetHeight;
@@ -580,7 +580,7 @@
       let idx = 0;
       function setHeroBg() {
         // double quotes — filenames with apostrophes (Dragon's Maid) break url('')
-        heroBg.style.backgroundImage = `url("images/${encodeURIComponent(featured[idx].file)}")`;
+        heroBg.style.backgroundImage = `url("/images/${encodeURIComponent(featured[idx].file)}")`;
         idx = (idx + 1) % featured.length;
       }
       setHeroBg();
@@ -677,7 +677,7 @@
       card.innerHTML = `
         <div class="art-card-img-wrap">
           <img class="art-card-img art-card-skeleton"
-               data-src="images/${encodeURIComponent(art.file)}"
+               data-src="/images/${encodeURIComponent(art.file)}"
                alt="${art.title}"
                loading="lazy" decoding="async">
           <div class="art-card-overlay"></div>
@@ -741,7 +741,7 @@
     const realIndex = filteredIndices[currentLbIndex];
     const art = ARTWORKS[realIndex];
     const img = document.getElementById("lb-image");
-    img.src = `images/${encodeURIComponent(art.file)}`;
+    img.src = `/images/${encodeURIComponent(art.file)}`;
     img.alt = art.title;
     img.style.animation = "none";
     img.offsetHeight;
@@ -760,7 +760,7 @@
       const idx = filteredIndices[(n + filteredIndices.length) % filteredIndices.length];
       if (idx !== undefined) {
         const pre = new Image();
-        pre.src = `images/${encodeURIComponent(ARTWORKS[idx].file)}`;
+        pre.src = `/images/${encodeURIComponent(ARTWORKS[idx].file)}`;
       }
     });
   }

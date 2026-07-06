@@ -4,6 +4,19 @@ Static HTML/CSS/JS art portfolio. No build step. Deployed via GitHub → Vercel
 (repo: https://github.com/dicksonpts98/senpapisama.com.git). Push to `main` and
 Vercel auto-redeploys.
 
+## Site structure (two designs, shared data)
+
+- `/` (root) — **"Dark Museum"** design: `index.html`, `style.css`, `main.js`.
+  This is the MAIN/live site.
+- `/classic/` — original **game-UI** design: `classic/index.html`,
+  `classic/css/style.css`, `classic/js/main.js`.
+- Shared by both: `data/artworks.js`, `assets/`, `images/`.
+- Old `/v2` URLs redirect to `/` (see `vercel.json`) — the Dark Museum used to
+  live at `/v2` before it was promoted to root.
+- **Path rule:** any page NOT at root must reference shared resources
+  (`/data/`, `/assets/`, `/images/`) with ABSOLUTE paths, or they 404. Its own
+  co-located files (css/js inside the same folder) can stay relative.
+
 ## Rules
 
 - **New art goes on TOP.** When adding new artwork, place its entry at the very
