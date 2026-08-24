@@ -29,6 +29,7 @@
 
 const ARTWORKS = [
   // ── NEW RELEASES (newest art goes here, on top) ──────────
+  { title: "FuwaMoco",          file: "15_FuwaMoco.jpg",         series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
   { title: "Kronii",            file: "15_Kronii.jpg",           series: "Council Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
   { title: "Nerissa",           file: "15_Nerissa.jpg",          series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
   { title: "Koseki",            file: "15_Koseki.jpg",           series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
