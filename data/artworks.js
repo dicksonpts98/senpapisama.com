@@ -5,11 +5,11 @@
 //  Each artwork has:
 //    - title:       display name
 //    - file:        filename inside /images/
-//    - series:      MUST be one of the 14 categories below
+//    - series:      MUST be one of the 16 categories below
 //    - description: your caption / story behind the piece
 //    - tags:        optional tags
 //
-//  The 15 categories (spelled exactly as shown):
+//  The 16 categories (spelled exactly as shown):
 //    ALL WORKS (auto — displays every piece)
 //    Featured
 //    Original Arts
@@ -25,10 +25,14 @@
 //    Hitman Reborn
 //    Zenless Zone Zero
 //    Chainsaw Man
+//    JoJo's Bizarre Adventure
 // ============================================================
 
 const ARTWORKS = [
   // ── NEW RELEASES (newest art goes here, on top) ──────────
+  { title: "Johnny Joestar",            file: "15_Johnny Joestar.jpg",       series: "JoJo's Bizarre Adventure", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "steel ball run"] },
+  { title: "Gyro Zeppeli",              file: "15_Gyro Zeppeli.jpg",         series: "JoJo's Bizarre Adventure", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "steel ball run"] },
+  { title: "Jujutsu Kaisen",            file: "15_Jujutsu Kaisen.jpg",       series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
   { title: "FuwaMoco",          file: "15_FuwaMoco.jpg",         series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
   { title: "Kronii",            file: "15_Kronii.jpg",           series: "Council Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
   { title: "Nerissa",           file: "15_Nerissa.jpg",          series: "Advent Hololive", description: "Edit this description — tell the story behind this piece.", tags: ["vtuber"] },
@@ -151,7 +155,8 @@ const CATEGORY_ORDER = [
   "Genshin Impact",
   "Hitman Reborn",
   "Zenless Zone Zero",
-  "Chainsaw Man"
+  "Chainsaw Man",
+  "JoJo's Bizarre Adventure"
 ];
 
 
