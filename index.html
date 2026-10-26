@@ -2,101 +2,190 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SENPAPI-SAMA — Art Gallery</title>
-  <meta name="description" content="SENPAPI-SAMA (aka WUSENSEI) — Digital Artist & Illustrator. The gallery.">
+  <meta name="description" content="SENPAPI-SAMA (aka Wusensei) — digital artist & illustrator. Anime, games and original portraits, plus where to find the table at conventions.">
+  <meta name="theme-color" content="#0B0B0D">
+  <meta property="og:title" content="SENPAPI-SAMA — Art Gallery">
+  <meta property="og:description" content="Anime, games and original portraits by Wusensei.">
+  <meta property="og:image" content="https://senpapisama.com/assets/logo.png">
+  <meta property="og:url" content="https://senpapisama.com/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/home.css">
 </head>
 <body>
+  <a class="skip" href="#wall">Skip to the gallery</a>
 
-  <div class="progress" id="progress"></div>
-
-  <!-- ── NAV ─────────────────────────────────────────────── -->
-  <header class="nav" id="nav">
-    <a class="nav-name" id="nav-home" href="#top">SENPAPI-SAMA<span class="nav-dot">●</span></a>
-    <nav class="nav-links">
-      <button class="nav-link active" data-section="gallery">Gallery</button>
-      <button class="nav-link" data-section="table">Table Display</button>
-      <button class="nav-link" data-section="about">About</button>
+  <header class="hdr">
+    <a class="hdr-logo" href="#top" aria-label="SENPAPI-SAMA, back to top"><img src="/assets/logo.png" alt="SENPAPI-SAMA" width="52" height="52"></a>
+    <nav class="hdr-nav" aria-label="Sections">
+      <a href="#top" class="navl desk">New</a>
+      <a href="#rooms" class="navl desk">Rooms</a>
+      <a href="#wall" class="navl desk">The wall</a>
+      <a href="#table" class="navl"><span class="desk">Table display</span><span class="mob">Cons</span></a>
+      <a href="#about" class="navl">About</a>
     </nav>
   </header>
 
-  <!-- ── HERO ────────────────────────────────────────────── -->
-  <section class="hero" id="top">
-    <p class="hero-eyebrow">Digital Artist &amp; Illustrator — aka Wusensei</p>
-    <h1 class="hero-name">SENPAPI<span class="accent">—</span>SAMA</h1>
-    <div class="hero-meta">
-      <span><b id="meta-works">0</b> works</span>
-      <span class="meta-sep">✦</span>
-      <span><b id="meta-series">0</b> series</span>
-      <span class="meta-sep">✦</span>
-      <span>anime · games · originals</span>
-    </div>
-  </section>
+  <main>
+    <h1 class="sr-only m-h1">SENPAPI-SAMA — art gallery</h1>
 
-  <!-- ── MARQUEE ─────────────────────────────────────────── -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marquee-track"></div>
-  </div>
+    <!-- ── LATEST COLLECTIONS (desktop) ─────────────────────── -->
+    <section id="top" class="hero" aria-label="Latest collections">
+      <div class="hero-grid">
+        <div class="hero-id">
+          <img class="hero-logo" src="/assets/logo.png" alt="SENPAPI-SAMA logo" width="160" height="160">
+          <p class="mono accent">Digital artist &amp; illustrator — aka Wusensei</p>
+          <h1 class="hero-name">SENPAPI<br>SAMA</h1>
+          <p class="hero-tag">Anime · games · originals.</p>
+          <div class="mono hero-stats"><span><b id="stat-works">73</b> works</span><span class="accent">✦</span><span><b id="stat-rooms">13</b> rooms</span><span class="accent">✦</span><span><b id="stat-moods">4</b> moods</span></div>
+          <div class="hc">
+            <div class="hc-top"><span class="mono">Latest collections</span><span class="mono hc-pos" id="hc-pos">01 / 03</span></div>
+            <div class="segs" id="segs"></div>
+            <div class="hc-btns">
+              <button type="button" class="ibtn" id="hc-prev" aria-label="Previous collection"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <button type="button" class="ibtn" id="hc-play" aria-label="Pause slideshow"><svg class="ic ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg><svg class="ic ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg></button>
+              <button type="button" class="ibtn" id="hc-next" aria-label="Next collection"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+              <span class="mono hc-hint">Hover the art to hold it</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage" id="stage">
+          <div class="glow" id="glow" aria-hidden="true"></div>
+          <div class="stage-row">
+            <div class="hangbox" id="hangbox"></div>
+            <div class="side">
+              <div class="upnext"><p class="mono">Up next</p><div class="peeks" id="peeks"></div></div>
+              <div class="placard" id="placard"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ── FILTERS ─────────────────────────────────────────── -->
-  <div class="filters-wrap" id="filters-wrap">
-    <div class="filters" id="filters"></div>
-  </div>
+    <div class="marquee" aria-hidden="true"><div class="marq" id="marq"></div></div>
 
-  <!-- ── GALLERY (masonry, uncropped) ────────────────────── -->
-  <main class="gallery" id="gallery-section">
-    <div class="masonry" id="masonry"></div>
+    <!-- ── ROOMS (desktop) ──────────────────────────────────── -->
+    <section id="rooms" class="sec rooms" aria-labelledby="rooms-h">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-title">
+            <span class="mono">02 — Rooms</span>
+            <h2 id="rooms-h" class="disp h2">Pick a room.</h2>
+            <p class="sub">Thirteen series — or four moods, if you'd rather follow a feeling.</p>
+          </div>
+          <div class="toggle" role="group" aria-label="Browse rooms by">
+            <button type="button" class="segbtn on" id="by-series" aria-pressed="true">By series</button>
+            <button type="button" class="segbtn" id="by-mood" aria-pressed="false">By mood</button>
+          </div>
+        </div>
+        <div class="room-tiles" id="room-tiles"></div>
+        <div class="mood-tiles" id="mood-tiles" hidden></div>
+      </div>
+    </section>
+
+    <!-- ── THE WALL ─────────────────────────────────────────── -->
+    <section id="wall" class="sec wall" aria-labelledby="wall-h">
+      <div class="m-intro">
+        <div class="m-intro-txt">
+          <span class="mono accent">Anime · games · originals</span>
+          <p class="disp m-title"><span id="m-title">All works</span> <span class="mono" id="m-count">73 works</span></p>
+        </div>
+        <button type="button" class="ibtn" id="m-shuffle" aria-label="Shuffle the wall"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></button>
+      </div>
+      <nav class="chips" aria-label="Filter the wall"><div class="strip" id="chips"></div></nav>
+
+      <div class="wrap">
+        <div class="sec-head wall-head">
+          <div class="sec-title">
+            <span class="mono">03 — The wall · <span id="wall-kicker">All rooms, mixed</span></span>
+            <h2 id="wall-h" class="disp h2">Everything, hung salon-style.</h2>
+            <span class="mono ink" id="wall-count"></span>
+          </div>
+          <div class="btns">
+            <button type="button" class="btn ghost" id="show-all" hidden>Show everything</button>
+            <button type="button" class="btn solid" id="shuffle"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>Shuffle the wall</button>
+          </div>
+        </div>
+        <div class="wallgrid" id="wallgrid"></div>
+        <div class="more" id="more-wrap"><button type="button" class="btn ghost" id="more"><span id="more-label">Hang 12 more</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></button></div>
+      </div>
+    </section>
+
+    <!-- ── TABLE DISPLAY ────────────────────────────────────── -->
+    <section id="table" class="sec table" aria-labelledby="table-h">
+      <div class="wrap">
+        <div class="table-head">
+          <div class="sec-title">
+            <span class="mono">04 — Table display</span>
+            <h2 id="table-h" class="disp h2">Catch me at the table.</h2>
+            <p class="sub desk">Booth setups from conventions — and where the table goes next.</p>
+          </div>
+          <div class="cons-wrap">
+            <ul class="cons" id="cons"></ul>
+            <p class="mono small">New dates go up as each convention confirms.</p>
+            <a href="https://www.instagram.com/senpapi.sama/" class="btn ghost" id="ig-follow">Follow on Instagram</a>
+          </div>
+        </div>
+        <div class="booth" id="booth" role="group" aria-label="Booth photos"></div>
+        <p class="mono small mob">Swipe for more setups →</p>
+      </div>
+    </section>
+
+    <!-- ── ABOUT ────────────────────────────────────────────── -->
+    <section id="about" class="sec about" aria-labelledby="about-h">
+      <div class="wrap about-grid">
+        <div class="about-id">
+          <h2 id="about-h" class="mono">05 — About</h2>
+          <img class="about-logo" src="/assets/logo.png" alt="SENPAPI-SAMA logo" width="280" height="280" loading="lazy">
+        </div>
+        <div class="about-body">
+          <p class="bio" id="bio"></p>
+          <div class="btns">
+            <a href="https://www.instagram.com/senpapi.sama/" class="btn solid" id="ig">Instagram</a>
+            <a href="mailto:senpapi-sama@hotmail.com" class="btn ghost" id="mail">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- ── TABLE DISPLAY ───────────────────────────────────── -->
-  <section class="booth" id="booth-section" hidden>
-    <div class="section-head">
-      <h2>Table Display</h2>
-      <p>Booth setups from conventions</p>
-    </div>
-    <div class="booth-grid" id="booth-grid"></div>
-  </section>
-
-  <!-- ── ABOUT (slide-over panel) ────────────────────────── -->
-  <div class="about" id="about-panel" aria-hidden="true">
-    <div class="about-backdrop" id="about-backdrop"></div>
-    <aside class="about-card">
-      <button class="about-close" id="about-close" aria-label="Close">✕</button>
-      <img class="about-logo" src="/assets/logo.png" alt="SENPAPI-SAMA logo">
-      <h2 class="about-name"></h2>
-      <p class="about-tagline"></p>
-      <p class="about-bio"></p>
-      <div class="about-links" id="about-links"></div>
-    </aside>
-  </div>
-
-  <!-- ── LIGHTBOX ────────────────────────────────────────── -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lb-close" id="lb-close" aria-label="Close">✕</button>
-    <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous">←</button>
-    <button class="lb-arrow lb-next" id="lb-next" aria-label="Next">→</button>
-    <figure class="lb-stage">
-      <img id="lb-image" src="" alt="">
-      <figcaption class="lb-caption">
-        <span class="lb-series"></span>
-        <h3 class="lb-title"></h3>
-        <span class="lb-count"></span>
-      </figcaption>
-    </figure>
-  </div>
-
-  <!-- ── FOOTER ──────────────────────────────────────────── -->
-  <footer class="footer">
-    <p>© SENPAPI-SAMA — all artworks are original creations</p>
-    <a class="footer-alt" href="/classic">view classic version →</a>
+  <footer class="ftr">
+    <span class="mono small">© SENPAPI-SAMA — All artworks are original creations</span>
+    <a href="/classic" class="navl small">View classic version →</a>
   </footer>
 
+  <!-- ── ARTWORK VIEWER ───────────────────────────────────── -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Artwork viewer" hidden>
+    <div class="lb-in">
+      <div class="lb-top">
+        <span class="mono" id="lb-pos"></span>
+        <button type="button" class="ibtn" id="lb-close" aria-label="Close viewer"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="lb-grid">
+        <div class="lb-art"><span class="lb-glow" id="lb-glow" aria-hidden="true"></span><img id="lb-img" src="" alt=""></div>
+        <div class="lb-info">
+          <span class="mono accent" id="lb-fr"></span>
+          <h2 class="disp lb-title" id="lb-title"></h2>
+          <dl class="lb-dl"><dt class="mono">Room</dt><dd id="lb-room"></dd></dl>
+          <div class="lb-nav">
+            <button type="button" class="ibtn" id="lb-prev" aria-label="Previous artwork"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button type="button" class="ibtn" id="lb-next" aria-label="Next artwork"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+          <div class="lb-rel">
+            <span class="mono" id="lb-rel-label"></span>
+            <div class="lb-rel-grid" id="lb-rel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="/data/artworks.js"></script>
-  <script src="/main.js"></script>
+  <script src="/data/gallery-meta.js"></script>
+  <script src="/home.js"></script>
 </body>
 </html>
