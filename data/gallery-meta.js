@@ -184,10 +184,11 @@ const GALLERY_META = {
   "booth": {
     "rows": [
       [
-        "booth-03.jpeg",
-        "booth-01.jpeg"
+        "booth-06.jpeg",
+        "booth-03.jpeg"
       ],
       [
+        "booth-01.jpeg",
         "booth-02.jpeg",
         "booth-04.jpeg",
         "booth-05.jpeg"
@@ -197,6 +198,7 @@ const GALLERY_META = {
       "booth-03.jpeg": 1.3333333333333333
     },
     "alts": {
+      "booth-06.jpeg": "Front view of the booth: Bleach poster wall in the middle, Hololive and Justice walls either side, SENPAPI-SAMA sign on the table",
       "booth-01.jpeg": "Corner booth with poster walls on both sides and prints on easels along the table",
       "booth-02.jpeg": "Aisle view of the booth with poster walls running the length of the table",
       "booth-03.jpeg": "Booth from the front: three poster walls above a long table of prints",
