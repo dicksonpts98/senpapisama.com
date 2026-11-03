@@ -170,6 +170,7 @@ const CATEGORY_ORDER = [
 // ============================================================
 
 const BOOTH_PHOTOS = [
+  { file: "booth-06.jpeg", alt: "Booth setup 6" },
   { file: "booth-01.jpeg", alt: "Booth setup 1" },
   { file: "booth-02.jpeg", alt: "Booth setup 2" },
   { file: "booth-03.jpeg", alt: "Booth setup 3" },
