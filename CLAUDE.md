@@ -4,7 +4,7 @@ Static HTML/CSS/JS art portfolio. No build step. Deployed via GitHub → Vercel
 (repo: https://github.com/dicksonpts98/senpapisama.com.git). Push to `main` and
 Vercel auto-redeploys.
 
-## Site structure (three designs, shared data)
+## Site structure (two designs, shared data)
 
 - `/` (root) — **Gallery homepage (Oct 2026 redesign)**: `index.html`,
   `home.css`, `home.js`, plus `data/gallery-meta.js` (latest-collections
@@ -13,8 +13,9 @@ Vercel auto-redeploys.
   phone layout (art-first 3-column wall) below.
 - `/previous` — the earlier **"Dark Museum"** homepage: `previous.html`.
   It still uses root `style.css` + `main.js` (absolute paths) — keep those.
-- `/classic/` — original **game-UI** design: `classic/index.html`,
-  `classic/css/style.css`, `classic/js/main.js`.
+- `/classic` — retired Nov 2026: the old game-UI design was deleted and
+  `/classic` now redirects to `/` (see `vercel.json`). Its files are still in
+  git history if ever needed.
 - Shared by both: `data/artworks.js`, `assets/`, `images/`.
 - Old `/v2` URLs redirect to `/` (see `vercel.json`) — the Dark Museum used to
   live at `/v2` before it was promoted to root (it now lives at `/previous`).
