@@ -41,7 +41,11 @@ Vercel auto-redeploys.
    → `pieces` to set its mood (`ink`/`neon`/`day`/`dusk`), glow `tint`, or
    `land: true` for a wide piece. Without one it still shows (mood "day").
    For a new collection, add it to the top of `newCollections` there.
-5. Commit + push to `main`.
+5. Bump the `?v=` date on the `/data/…`, `/home.js`, `/home.css` (index.html)
+   and `/data/…`, `/main.js`, `/style.css` (previous.html) tags. CSS/JS are
+   cached for 24 h (`vercel.json`), so without a new `?v=` returning visitors
+   keep seeing the old art list for up to a day.
+6. Commit + push to `main`.
 
 ## Local preview
 
