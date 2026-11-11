@@ -41,6 +41,12 @@ Vercel auto-redeploys.
    → `pieces` to set its mood (`ink`/`neon`/`day`/`dusk`), glow `tint`, or
    `land: true` for a wide piece. Without one it still shows (mood "day").
    For a new collection, add it to the top of `newCollections` there.
+   **The wall (section 3) runs newest first**: also add a new entry at the TOP
+   of `drops` in `gallery-meta.js` — `{ "added": "YYYY-MM", "name": "…",
+   "files": [...] }`. Each drop gets a wall label (desktop) / date tag (phone).
+   If you forget, art placed on top of `artworks.js` still leads the wall as
+   "Just added". Everything older is "The archive" (`archive`, `opening`), and
+   only the archive is shuffled.
 5. Bump the `?v=` date on the `/data/…`, `/home.js`, `/home.css` (index.html)
    and `/data/…`, `/main.js`, `/style.css` (previous.html) tags. CSS/JS are
    cached for 24 h (`vercel.json`), so without a new `?v=` returning visitors

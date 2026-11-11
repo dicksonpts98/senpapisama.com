@@ -74,8 +74,32 @@
     }
     return out;
   }
-  var opening = (META.opening || []).map(function (f) { return byId[f]; }).filter(Boolean);
-  var ORDER = opening.concat(curate(PIECES.filter(function (p) { return opening.indexOf(p) < 0; }), 11));
+  // wall order: newest drops first (META.drops, newest first), then the archive.
+  // Art added on top of artworks.js without a drops entry still leads, as "Just added".
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function monthOf(ym) { var m = /^(\d{4})-(\d{2})/.exec(ym || ''); return m && MONTHS[+m[2] - 1] ? { y: m[1], m: MONTHS[+m[2] - 1] } : null; }
+  var inDrop = {}, rawDrops = META.drops || [];
+  var DROPS = rawDrops.map(function (d, i) {
+    var ps = [];
+    (d.files || []).forEach(function (f) { var p = byId[f]; if (p && !inDrop[p.id]) { inDrop[p.id] = true; ps.push(p); } });
+    return { key: 'd' + i, no: rawDrops.length - i, when: monthOf(d.added), name: d.name || '', pieces: ps };
+  }).filter(function (d) { return d.pieces.length; });
+  if (DROPS.length) {
+    var firstDropped = Math.min.apply(null, PIECES.filter(function (p) { return inDrop[p.id]; }).map(function (p) { return p.idx; }));
+    var fresh = PIECES.filter(function (p) { return !inDrop[p.id] && p.idx < firstDropped; });
+    if (fresh.length) {
+      fresh.forEach(function (p) { inDrop[p.id] = true; });
+      DROPS.unshift({ key: 'new', no: rawDrops.length + 1, when: null, name: '', pieces: fresh });
+    }
+  }
+  var archMeta = META.archive || {};
+  var ARCHIVE = { key: 'archive', archive: true, when: monthOf(archMeta.added), name: archMeta.name || '', pieces: [] };
+  var archBase = PIECES.filter(function (p) { return !inDrop[p.id]; });
+  var opening = (META.opening || []).map(function (f) { return byId[f]; }).filter(function (p) { return p && !inDrop[p.id]; });
+  function archiveOrder(seed) {
+    return seed ? curate(archBase, seed) : opening.concat(curate(archBase.filter(function (p) { return opening.indexOf(p) < 0; }), 11));
+  }
+  var ORDER = [].concat.apply([], DROPS.map(function (d) { return d.pieces; })).concat(archiveOrder(0));
 
   var COLLECTIONS = (META.newCollections || []).map(function (c) {
     var ps = (c.files || []).map(function (f) { return byId[f]; }).filter(Boolean);
@@ -244,40 +268,96 @@
 
   // ── the wall ───────────────────────────────────────────────
   var grid = $('#wallgrid');
-  function currentList() {
-    var list = S.seed === 0 ? ORDER.slice() : curate(PIECES, S.seed);
+  // groups for the current filter, newest first; empty groups drop out
+  function currentGroups() {
     var f = S.filter;
-    if (f.kind === 'room') list = list.filter(function (p) { return p.room === f.id; });
-    if (f.kind === 'mood') list = list.filter(function (p) { return p.mood === f.id; });
-    return list;
+    var keep = function (p) { return f.kind === 'room' ? p.room === f.id : (f.kind === 'mood' ? p.mood === f.id : true); };
+    return DROPS.concat([ARCHIVE]).map(function (d) {
+      return { d: d, pieces: (d.archive ? archiveOrder(S.seed) : d.pieces).filter(keep) };
+    }).filter(function (g) { return g.pieces.length; });
+  }
+  function gridCols() {
+    var t = getComputedStyle(grid).gridTemplateColumns;
+    return t && t !== 'none' ? t.trim().split(/\s+/).length : 1;
+  }
+  function works(n) { return pad2(n) + (n === 1 ? ' work' : ' works'); }
+  function whenText(d) { return d.when ? 'added ' + d.when.m + ' ' + d.when.y : (d.key === 'new' ? 'just added' : ''); }
+  // desktop: a wall label hung in the grid at the start of each drop
+  function dropCard(g, newest) {
+    var d = g.d, w = d.when, n = g.pieces.length;
+    var kick = d.archive ? 'The archive' : 'Drop ' + pad2(d.no);
+    var big = d.key === 'new' ? 'New' : (w ? w.m.slice(0, 3) : '');
+    var sub = d.key === 'new' ? 'Just in' : (w ? w.y : '');
+    var name = S.filter.kind === 'all' ? d.name : '';
+    var sr = kick + (whenText(d) ? ', ' + whenText(d) : '') + ': ' + n + (n === 1 ? ' work' : ' works');
+    return '<div class="cellw dropw' + (newest ? ' newest' : '') + (d.archive ? ' arch' : '') + '"><div class="dropcard">' +
+      '<span class="sr-only">' + esc(sr) + '</span>' +
+      '<span class="dc-top" aria-hidden="true"><span class="mono dc-k">' + esc(kick) + '</span>' + (newest ? '<span class="dc-new">New</span>' : '') + '</span>' +
+      '<span class="dc-mid" aria-hidden="true"><span class="disp dc-m">' + esc(big) + '</span><span class="mono dc-y">' + esc(sub) + '</span></span>' +
+      '<span class="dc-bot" aria-hidden="true">' + (name ? '<span class="dc-name">' + esc(name) + '</span>' : '') + '<span class="mono dc-c">' + works(n) + '</span></span>' +
+      '</div></div>';
+  }
+  // phone: no extra cells (art first) — a small date tag on the first piece of each drop
+  function dropTag(d, newest) {
+    if (d.archive) return 'Archive';
+    var t = d.when ? d.when.m.slice(0, 3) + ' ’' + d.when.y.slice(2) : '';
+    return newest ? (t ? 'New · ' + t : 'New') : t;
   }
   function renderWall() {
     var phone = isPhone(), f = S.filter;
-    var list = currentList();
-    var start = phone ? 24 : 26, step = 12;
-    var shown = list.slice(0, start + S.more);
-    var ids = list.map(function (p) { return p.id; });
-    grid.innerHTML = shown.map(function (p, i) {
-      var big = !p.land && list.length > (phone ? 6 : 4) && (phone ? i % 12 === 9 : i % 9 === 0);
-      var size = p.land ? ' land' : (big ? ' big' : '');
-      return '<div class="cellw' + size + '"><span class="cglow" aria-hidden="true" style="background:' + esc(p.tint) + '"></span>' +
-        '<button type="button" class="cell" data-id="' + esc(p.id) + '" aria-label="Open ' + esc(p.title) + ', ' + esc(p.fr) + '">' +
-        '<img src="' + esc(p.src) + '" alt="" loading="' + (i < (phone ? 9 : 12) ? 'eager' : 'lazy') + '" decoding="async">' +
-        '<span class="mono cell-no" aria-hidden="true">' + pad2(i + 1) + '</span>' +
-        '<span class="lab" aria-hidden="true"><span class="disp lab-title">' + esc(p.title) + '</span><span class="lab-fr">' + esc(p.fr) + '</span></span>' +
-        '</button></div>';
-    }).join('');
-    grid.dataset.ids = JSON.stringify(ids);
-    var remaining = list.length - shown.length;
+    var groups = currentGroups();
+    var list = [].concat.apply([], groups.map(function (g) { return g.pieces; }));
+    var labelled = groups.length > 1, newestKey = DROPS.length ? DROPS[0].key : '';
+    var step = 12, want = Math.min(list.length, (phone ? 24 : 26) + S.more);
+    var cols = phone ? 3 : gridCols();
+    function plan(limit) {
+      var cells = [], units = 0, n = 0;
+      groups.forEach(function (g) {
+        if (n >= limit) return;
+        var newest = g.d.key === newestKey;
+        if (labelled && !phone) { cells.push(dropCard(g, newest)); units += 1; }
+        g.pieces.forEach(function (p, j) {
+          if (n >= limit) return;
+          var big = g.d.archive && !p.land && g.pieces.length > (phone ? 6 : 4) && (phone ? j % 12 === 9 : j % 9 === 0);
+          var size = p.land ? ' land' : (big ? ' big' : '');
+          var tag = labelled && phone && j === 0 ? dropTag(g.d, newest) : '';
+          var when = g.d.archive ? '' : whenText(g.d);
+          units += p.land ? 2 : (big ? 4 : 1);
+          cells.push('<div class="cellw' + size + '"><span class="cglow" aria-hidden="true" style="background:' + esc(p.tint) + '"></span>' +
+            '<button type="button" class="cell" data-id="' + esc(p.id) + '" aria-label="Open ' + esc(p.title) + ', ' + esc(p.fr) + (when ? ', ' + when : '') + '">' +
+            '<img src="' + esc(p.src) + '" alt="" loading="' + (n < (phone ? 9 : 12) ? 'eager' : 'lazy') + '" decoding="async">' +
+            '<span class="mono cell-no" aria-hidden="true">' + pad2(n + 1) + '</span>' +
+            (tag ? '<span class="dtag' + (newest ? ' new' : '') + '" aria-hidden="true">' + esc(tag) + '</span>' : '') +
+            '<span class="lab" aria-hidden="true"><span class="disp lab-title">' + esc(p.title) + '</span><span class="lab-fr">' + esc(p.fr) + '</span></span>' +
+            '</button></div>');
+          n++;
+        });
+      });
+      return { html: cells.join(''), units: units, n: n };
+    }
+    // end on a full row: nudge the count (a few more first, else a few fewer)
+    var built = plan(want);
+    if (want < list.length) {
+      for (var d = 1; built.units % cols && d < cols; d++) {
+        var more = want + d <= list.length ? plan(want + d) : null;
+        var less = want - d >= 1 ? plan(want - d) : null;
+        if (more && more.units % cols === 0) built = more;
+        else if (less && less.units % cols === 0) built = less;
+      }
+    }
+    var shownN = built.n;
+    grid.innerHTML = built.html;
+    grid.dataset.ids = JSON.stringify(list.map(function (p) { return p.id; }));
+    var remaining = list.length - shownN;
     $('#more-wrap').hidden = remaining <= 0;
     $('#more-label').textContent = (phone ? 'Show ' : 'Hang ') + Math.min(step, remaining) + ' more';
 
-    var title = 'Everything, hung salon-style.', kicker = 'All rooms, mixed', mTitle = 'All works';
-    if (f.kind === 'room') { title = roomName(f.id) + '.'; kicker = 'Room'; mTitle = roomName(f.id); }
-    if (f.kind === 'mood') { title = moodOf(f.id).name + '.'; kicker = 'Mood'; mTitle = moodOf(f.id).name; }
+    var title = 'Everything, newest first.', kicker = 'All rooms, by date added', mTitle = 'All works';
+    if (f.kind === 'room') { title = roomName(f.id) + '.'; kicker = 'Room · newest first'; mTitle = roomName(f.id); }
+    if (f.kind === 'mood') { title = moodOf(f.id).name + '.'; kicker = 'Mood · newest first'; mTitle = moodOf(f.id).name; }
     $('#wall-h').textContent = title;
     $('#wall-kicker').textContent = kicker;
-    $('#wall-count').textContent = pad2(shown.length) + ' of ' + pad2(list.length) + ' hung';
+    $('#wall-count').textContent = pad2(shownN) + ' of ' + pad2(list.length) + ' hung';
     $('#show-all').hidden = f.kind === 'all';
     $('#m-title').textContent = mTitle;
     $('#m-count').textContent = list.length + ' works';
