@@ -127,6 +127,15 @@ const GALLERY_META = {
   ],
   "newCollections": [
     {
+      "name": "Stardust Crusaders",
+      "sub": "JoJo’s Bizarre Adventure",
+      "room": "jojo",
+      "files": [
+        "15_Jotaro Kujo.jpg",
+        "15_DIO.jpg"
+      ]
+    },
+    {
       "name": "Steel Ball Run",
       "sub": "JoJo’s Bizarre Adventure",
       "room": "jojo",
@@ -224,6 +233,16 @@ const GALLERY_META = {
     }
   ],
   "pieces": {
+    "15_Jotaro Kujo.jpg": {
+      "mood": "dusk",
+      "tint": "#A65BB3",
+      "fr": "JoJo’s Bizarre Adventure"
+    },
+    "15_DIO.jpg": {
+      "mood": "neon",
+      "tint": "#E8C93A",
+      "fr": "JoJo’s Bizarre Adventure"
+    },
     "15_Dandadan.jpg": {
       "mood": "neon",
       "tint": "#2BE36B",

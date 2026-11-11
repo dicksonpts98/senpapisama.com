@@ -30,6 +30,8 @@
 
 const ARTWORKS = [
   // ── NEW RELEASES (newest art goes here, on top) ──────────
+  { title: "Jotaro Kujo",               file: "15_Jotaro Kujo.jpg",          series: "JoJo's Bizarre Adventure", description: "Stardust Crusaders. Jotaro from below: the coat, the chain and the stare fill the frame, and the menace rises off his shoulder in violet.", tags: ["anime", "stardust crusaders"] },
+  { title: "DIO",                       file: "15_DIO.jpg",                  series: "JoJo's Bizarre Adventure", description: "Stardust Crusaders. The other half of the pair: gold jacket, heart headband, fangs showing, and the menace in acid green on a yellow burst.", tags: ["anime", "stardust crusaders"] },
   { title: "Johnny Joestar",            file: "15_Johnny Joestar.jpg",       series: "JoJo's Bizarre Adventure", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "steel ball run"] },
   { title: "Gyro Zeppeli",              file: "15_Gyro Zeppeli.jpg",         series: "JoJo's Bizarre Adventure", description: "Edit this description — tell the story behind this piece.", tags: ["anime", "steel ball run"] },
   { title: "Jujutsu Kaisen",            file: "15_Jujutsu Kaisen.jpg",       series: "Featured", description: "Edit this description — tell the story behind this piece.", tags: ["anime"] },
