@@ -4,7 +4,13 @@
 //  adds the homepage extras:
 //   - newCollections: the "Latest collections" slideshow up top
 //                     (newest first; files must match artworks.js)
-//   - opening:        the hand-picked first pieces on the wall
+//   - drops:          "The wall" runs newest first. One entry per
+//                     release, NEWEST FIRST: "added" is the year-
+//                     month ("2026-11"), files must match artworks.js.
+//                     Art put on top of artworks.js with no drop
+//                     entry yet still leads the wall as "Just added".
+//   - archive:        label for everything older than the drops
+//   - opening:        the hand-picked first pieces of the archive
 //   - cons:           upcoming conventions in "Table display"
 //   - pieces:         per-artwork mood (ink / neon / day / dusk),
 //                     glow colour, series label, optional title
@@ -164,6 +170,45 @@ const GALLERY_META = {
       ]
     }
   ],
+  "drops": [
+    {
+      "added": "2026-11",
+      "name": "Stardust Crusaders",
+      "files": [
+        "15_Jotaro Kujo.jpg",
+        "15_DIO.jpg"
+      ]
+    },
+    {
+      "added": "2026-10",
+      "name": "Steel Ball Run & Jujutsu Kaisen",
+      "files": [
+        "15_Johnny Joestar.jpg",
+        "15_Gyro Zeppeli.jpg",
+        "15_Jujutsu Kaisen.jpg"
+      ]
+    },
+    {
+      "added": "2026-08",
+      "name": "FuwaMoco",
+      "files": [
+        "15_FuwaMoco.jpg"
+      ]
+    },
+    {
+      "added": "2026-06",
+      "name": "Hololive",
+      "files": [
+        "15_Kronii.jpg",
+        "15_Nerissa.jpg",
+        "15_Koseki.jpg"
+      ]
+    }
+  ],
+  "archive": {
+    "added": "2026-04",
+    "name": "Launch collection"
+  },
   "opening": [
     "15_Dandadan.jpg",
     "15_Chunli.jpg",
